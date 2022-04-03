@@ -79,23 +79,6 @@ def move(map, org, des, player):
         map[int(des)] = player
         print_map(map)
 
-
-#function to check if the specified player has a line on the board
-verticals = [[0, 9, 21], [3, 10, 18], [6, 11, 15], [1, 4, 7], [16, 19, 22], [8, 12, 17], [5, 13, 20], [3, 15, 23]]
-def check_line(map,player):
-    line = False
-    for i in range(0, 21, 3):
-        if (map[i] == player and map[i + 1] == player and map[i + 2] == player):
-            line = True
-            break
-
-    for v in verticals:
-        if all(map[i] == player for i in v):
-            line = True
-            break
-
-    return line
-
 #function for a specified player to remove their opponent's piece
 #can only remove if piece doesn't form a line
 def remove_piece(map, move, player):
@@ -117,6 +100,7 @@ def remove_piece(map, move, player):
         move = input()
         remove_piece(map, int(move), player)
 
+verticals = [[0, 9, 21], [3, 10, 18], [6, 11, 15], [1, 4, 7], [16, 19, 22], [8, 12, 17], [5, 13, 20], [2, 14, 23]]
 #function to check if a specified piece forms a line
 def in_line(map, move):
     if(map[move]=='x'): return False
@@ -145,7 +129,7 @@ while(player1_moves!=0 and player2_moves!=0):
     move = input()
     phase1(map,int(move), 1)
     player1_moves-=1
-    if(check_line(map,1)):
+    if(in_line(map, int(move))):
         print("Player 1 can remove a piece:")
         move = input()
         remove_piece(map,int(move),1)
@@ -154,7 +138,7 @@ while(player1_moves!=0 and player2_moves!=0):
     move = input()
     phase1(map,int(move), 2)
     player2_moves-=1
-    if(check_line(map,2)):
+    if(in_line(map, int(move))):
         print("Player 2 can remove a piece:")
         move = input()
         remove_piece(map,int(move),2)
@@ -175,7 +159,7 @@ while count[0] > 0 and count[1] > 0:
         phase2(map, int(org), int(des), 1)
     else:
         phase3(map, int(org), int(des), 1)
-    if(check_line(map,1)):
+    if(in_line(map, int(des))):
         print("Player 1 can remove a piece:")
         move = input()
         remove_piece(map,int(move),1)
@@ -186,8 +170,8 @@ while count[0] > 0 and count[1] > 0:
     if player2_phase == 2:
         phase2(map, int(org), int(des), 2)
     else:
-        phase3(map, int(org), int(des), 233 )
-    if(check_line(map,2)):
+        phase3(map, int(org), int(des), 2)
+    if(in_line(map, int(des))):
         print("Player 2 can remove a piece:")
         move = input()
         remove_piece(map,int(move),2)
