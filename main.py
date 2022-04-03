@@ -40,15 +40,15 @@ def phase1(map,move, player):
 
 #function called during player's turn during phase two, moving pieces in a line
 def phase2(map, org, des, player):
-    move = False
+    can_move = False
     if des == org + 1 or des == org + 2:
-        move = True
+        can_move = True
     else:
         for v in verticals:
             if org in v and des in v:
-                move = True
+                can_move = True
                 break
-    if move: move(map, des, org, player)
+    if can_move: move(map, des, org, player)
     else:
         print("Invalid input: not moving in a line")
         print_map(map)
@@ -112,20 +112,18 @@ verticals = [[0, 9, 21], [3, 10, 18], [6, 11, 15], [1, 4, 7], [16, 19, 22], [8, 
 #function to check if a specified piece forms a line
 def in_line(map, move):
     if(map[move]=='x'): return False
-    remove = True
+
     for i in range(0, 21, 3):
         if move == i or move == i + 1 or move == i + 2:
             if map[i] == map[i + 1] and map[i] == map[i + 2]:
-                remove = False
-                break
+                return True
 
     for v in verticals:
         if move in v:
             if map[v[0]] == map[v[1]] and map[v[0]] == map[v[2]]:
-                remove = False
-                break
+                return True
             
-    return not remove
+    return False
 
 map = ['x','x','x','x','x','x','x','x','x','x','x','x','x','x','x','x','x','x','x','x','x','x','x','x']
 
