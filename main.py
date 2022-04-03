@@ -88,12 +88,20 @@ def remove_piece(map, move, player):
             map[move] = 'x'
             count[0] -= 1
             print_map(map)
+        else:
+            print("Invalid input: piece cannot be removed.")
+            move = input()
+            remove_piece(map, int(move), player)
     elif(map[move]==2 and player==1):
         if not in_line(map, move):
             print("Player 1 removed Player 2's piece at "+str(move))
             map[move] = 'x'
             count[1] -= 1
             print_map(map)
+        else:
+            print("Invalid input: piece cannot be removed.")
+            move = input()
+            remove_piece(map, int(move), player)
     else:
         print("Invalid move")
         print_map(map)
