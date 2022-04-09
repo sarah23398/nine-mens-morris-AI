@@ -1,13 +1,6 @@
-# Author: aqeelanwar
-# Created: 12 March,2020, 7:06 PM
-# Email: aqeel.anwar@gatech.edu
-
 from tkinter import *
 import numpy as np
 
-
-player1_color = '#58ECB6'
-player2_color = '#C834CA'
 colors = ['#FFFFFF', '#58ECB6','#C834CA']
 circles = [[55,95,280,320,505,545],[130,170,280,320,430,470],[205,245,280,320,355,395]]
 class NMM_board():
