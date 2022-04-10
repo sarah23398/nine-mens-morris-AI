@@ -6,7 +6,7 @@ circles = [[55,95,280,320,505,545],[130,170,280,320,430,470],[205,245,280,320,35
 class NMM_board():
     def __init__(self):
         self.window = Tk()
-        self.window.title('Nine men\'s Morris')
+        self.window.title('Nine Men\'s Morris')
         self.canvas=Canvas(self.window, width=600,height=600)
         self.canvas.pack()
 
@@ -32,9 +32,9 @@ class NMM_board():
     def update_draw(self):
         self.canvas.delete('all')
         if(self.removal):
-            self.canvas.create_text(300, 30, font="cmr 25 bold", fill='black', text='player '+str(self.current_turn)+' removes a piece')
+            self.canvas.create_text(300, 30, font="cmr 25 bold", fill='black', text='Player '+str(self.current_turn)+' removes a piece')
         else:
-            self.canvas.create_text(300, 30, font="cmr 25 bold", fill='black', text='it is player '+str(self.current_turn)+'\'s turn')
+            self.canvas.create_text(300, 30, font="cmr 25 bold", fill='black', text='Player '+str(self.current_turn)+'\'s turn:')
         self.canvas.create_line(75, 75, 75, 525, width=2)
         self.canvas.create_line(75, 75, 525, 75, width=2)
         self.canvas.create_line(525, 75, 525, 525, width=2)
@@ -66,7 +66,7 @@ class NMM_board():
             self.canvas.create_oval(circles[i][0], circles[i][2], circles[i][1], circles[i][3], fill=colors[self.board[i][7]])
 
     def initialize_board(self):
-        self.canvas.create_text(300, 30, font="cmr 25 bold", fill='black', text='it is player 1\'s turn')
+        self.canvas.create_text(300, 30, font="cmr 25 bold", fill='black', text='Player 1\'s turn:')
         self.canvas.create_line(75, 75, 75, 525, width=2)
         self.canvas.create_line(75, 75, 525, 75, width=2)
         self.canvas.create_line(525, 75, 525, 525, width=2)
@@ -215,7 +215,7 @@ class NMM_board():
         self.update_draw()
         if(self.phase1_moves==0):
             self.phase = 2
-            print('going to phase 2')
+            print('Entering Phase 2:')
 
     def phase2(self,event):
         position = self.click_to_cord(event.x,event.y)
@@ -272,9 +272,9 @@ class NMM_board():
     def game_over(self):
         self.canvas.delete('all')
         if(self.player_pieces[0]<3):
-            self.canvas.create_text(300, 300, font="cmr 25 bold", fill='black', text='player 2 wins!')
+            self.canvas.create_text(300, 300, font="cmr 25 bold", fill='black', text='Player 2 wins!')
         else:
-            self.canvas.create_text(300, 300, font="cmr 25 bold", fill='black', text='player 1 wins!')
+            self.canvas.create_text(300, 300, font="cmr 25 bold", fill='black', text='Player 1 wins!')
 
 
 game_instance = NMM_board()
