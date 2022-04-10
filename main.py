@@ -49,7 +49,7 @@ def phase2(map, org, des, player):
             if org in v and des in v:
                 can_move = True
                 break
-    if can_move: move(map, des, org, player)
+    if can_move: move(map, org, des, player)
     else:
         print("Invalid input: not moving in a line")
         print_map(map)
@@ -59,7 +59,7 @@ def phase2(map, org, des, player):
 
 #function called during player's turn during phase three, moving pieces freely
 def phase3(map, org, des, player):
-    move(map, des, org, player)
+    move(map, org, des, player)
 
 def move(map, org, des, player):
     if org > 23 or org < 0 or des > 23 or des < 0:
@@ -69,6 +69,8 @@ def move(map, org, des, player):
         des = input()
         phase2(map, int(org), int(des), player)
     elif (map[int(org)] != player) or (map[int(des) != 'x']):
+        print(map[org], map[des])
+        print(player)
         print("Invalid input")
         print_map(map)
         org = input()

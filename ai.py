@@ -164,25 +164,6 @@ def evaluate(map, phase):
     
     return score
 
-# Phase 0 = removal
-def generate_moves(map, player, phase):
-    moves = []
-    for i in range(len(map)):
-        if phase == 0:
-            opponent = 2 if player == 1 else 1
-            if map[i] == opponent:
-                move = (i, None)
-                moves.append(move)
-        elif phase == 1:
-            if map[i] == 'x':
-                move = (None, i)
-                moves.append(move)
-        elif phase == 2:
-            pass
-        else:
-            pass
-    return moves
-
 #function to check if a specified piece forms a line
 def in_line(map, move):
     if(map[move]=='x'): return False
@@ -198,6 +179,41 @@ def in_line(map, move):
                 return True
             
     return False
+
+# Phase 0 = removal
+def generate_moves(map, player, phase):
+    moves = []
+    for i in range(len(map)):
+        if phase == 0:
+            opponent = 2 if player == 1 else 1
+            if map[i] == opponent:
+                if not in_line(map, i):
+                    move = (i, None)
+                    moves.append(move)
+        elif phase == 1:
+            if map[i] == 'x':
+                move = (None, i)
+                moves.append(move)
+        elif phase == 2:
+            if map[i] == player:
+                for j in range(len(map)):
+                    if map[j] == 'x':
+                        if j == i + 1 or j == i - 1:
+                            move = (i, j)
+                            moves.append(move)
+                        else:
+                            for v in verticals:
+                                if i in v and j in v:
+                                    move = (i, j)
+                                    moves.append(move)
+                                    break
+        else:
+            if map[i] == player:
+                for j in range(len(map)):
+                    if map[j] == 'x':
+                        move = (i, j)
+                        moves.append(move)
+    return moves
 
 
 def minimax(map, level, player, phase, remove):
@@ -255,5 +271,5 @@ def minimax(map, level, player, phase, remove):
                     best_move = move
     return (best_score, best_move)
 
-#example = [1, 1, 2, 1, 2, 2, 1, 2, 1, 1, 1, 1, 'x', 'x', 'x', 'x', 'x', 'x', 'x', 2, 2, 'x', 'x', 2]
-#print(minimax(example, 10, 1, 1, True))
+#example = [1, 1, 2, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 'x', 'x', 'x', 'x', 'x', 'x']
+#print(minimax(example, 5, 1, 2, False))
