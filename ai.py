@@ -1,11 +1,13 @@
 import copy
 import math
+from main import in_line
 
 # Max recursion depth: level 5
 
 map = ['x','x','x','x','x','x','x','x','x','x','x','x','x','x','x','x','x','x','x','x','x','x','x','x']
 verticals = [[0, 9, 21], [3, 10, 18], [6, 11, 15], [1, 4, 7], [16, 19, 22], [8, 12, 17], [5, 13, 20], [2, 14, 23]]
-scores = {}
+scores1 = {}
+scores2 = {}
 game_over = False
 
 # Scores are as follows:
@@ -160,16 +162,26 @@ def evaluate(map, phase):
     
     return score
 
-def generate_moves(map, player):
+# Phase 0 = removal
+def generate_moves(map, player, phase):
     moves = []
     for i in range(len(map)):
-        if map[i] == 'x':
-            move = copy.deepcopy(map)
-            move[i] = player
-            moves.append(move)
+        if phase == 0:
+            if map[i] == abs(player - 1):
+                move = (None, i)
+                moves.append(move)
+        elif phase == 1:
+            if map[i] == 'x':
+                move = (i, None)
+                moves.append(move)
+        elif phase == 2:
+            pass
+        else:
+            pass
     return moves
 
-def minimax(map, level, player):
+
+def minimax(map, level, player, phase, remove):
     if player == 1: best_score = -math.inf
     else: best_score = math.inf
     best_move = None
@@ -177,29 +189,45 @@ def minimax(map, level, player):
     if game_over or level == 0:
         best_score = evaluate(map, 1)
     else:
-        children = generate_moves(map, player)
+        if remove: children = generate_moves(map, player, 0)
+        else: children = generate_moves(map, player, phase)
+        remove = False
         if player == 1:
             for child in children:
                 move = child
-                if tuple(move) in scores:
-                    score = scores[tuple(move)]
+                if move in scores1:
+                    score = scores1[move]
                 else:
-                    score = minimax(move, level - 1, 2)[0]
-                    scores[tuple(move)] = score
+                    new_map = copy.deepcopy(map)
+                    if move[0] != None:
+                        new_map[move[0]] = 'x'
+                    if move[1] != None:
+                        new_map[move[1]] = player
+                        if in_line(new_map, move[1]):
+                            remove = True
+                    score = minimax(new_map, level - 1, 2, phase, remove)[0]
+                    scores1[move] = score
                 if score > best_score: 
                     best_score = score
                     best_move = move
         else:
             for child in children:
                 move = child
-                if tuple(move) in scores:
-                    score = scores[tuple(move)]
+                if move in scores2:
+                    score = scores2[move]
                 else:
-                    score = minimax(move, level - 1, 1)[0]
-                    scores[tuple(move)] = score
+                    new_map = copy.deepcopy(map)
+                    if move[0] != None:
+                        new_map[move[0]] = 'x'
+                    if move[1] != None:
+                        new_map[move[1]] = player
+                        if in_line(new_map, move[1]):
+                            remove = True
+                    score = minimax(new_map, level - 1, 1, phase, remove)[0]
+                    scores2[move] = score
                 if score < best_score: 
                     best_score = score
                     best_move = move
     return best_score, best_move
 
-print(minimax(map, 5, 1))
+print(minimax(map, 10, 1, 1, False))

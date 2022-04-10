@@ -127,62 +127,65 @@ def in_line(map, move):
 
 map = ['x','x','x','x','x','x','x','x','x','x','x','x','x','x','x','x','x','x','x','x','x','x','x','x']
 
-player1_moves = 9
-player2_moves = 9
-count = [0, 0]
-while(player1_moves!=0 and player2_moves!=0):
-    print("Player 1's turn:")
-    move = input()
-    phase1(map,int(move), 1)
-    player1_moves-=1
-    if(in_line(map, int(move))):
-        print("Player 1 can remove a piece:")
+def play():
+    player1_moves = 9
+    player2_moves = 9
+    count = [0, 0]
+    while(player1_moves!=0 and player2_moves!=0):
+        print("Player 1's turn:")
         move = input()
-        remove_piece(map,int(move),1)
+        phase1(map,int(move), 1)
+        player1_moves-=1
+        if(in_line(map, int(move))):
+            print("Player 1 can remove a piece:")
+            move = input()
+            remove_piece(map,int(move),1)
 
-    print("Player 2's turn:")
-    move = input()
-    phase1(map,int(move), 2)
-    player2_moves-=1
-    if(in_line(map, int(move))):
-        print("Player 2 can remove a piece:")
+        print("Player 2's turn:")
         move = input()
-        remove_piece(map,int(move),2)
-print("Final map: ")
-print_map(map)
+        phase1(map,int(move), 2)
+        player2_moves-=1
+        if(in_line(map, int(move))):
+            print("Player 2 can remove a piece:")
+            move = input()
+            remove_piece(map,int(move),2)
+    print("Final map: ")
+    print_map(map)
 
-while count[0] > 0 and count[1] > 0:
-    if count[0] > 3: player1_phase = 2
-    else: player1_phase = 3
-    if count[1] > 3: player2_phase = 2
-    else: player2_phase = 3
-    print("Player 1 in Phase " + str(player1_phase) + " and Player 2 in Phase " + str(player2_phase))
+    while count[0] > 0 and count[1] > 0:
+        if count[0] > 3: player1_phase = 2
+        else: player1_phase = 3
+        if count[1] > 3: player2_phase = 2
+        else: player2_phase = 3
+        print("Player 1 in Phase " + str(player1_phase) + " and Player 2 in Phase " + str(player2_phase))
 
-    print("Player 1's turn:")
-    org = input()
-    des = input()
-    if player1_phase == 2:
-        phase2(map, int(org), int(des), 1)
+        print("Player 1's turn:")
+        org = input()
+        des = input()
+        if player1_phase == 2:
+            phase2(map, int(org), int(des), 1)
+        else:
+            phase3(map, int(org), int(des), 1)
+        if(in_line(map, int(des))):
+            print("Player 1 can remove a piece:")
+            move = input()
+            remove_piece(map,int(move),1)
+
+        print("Player 2's turn:")
+        org = input()
+        des = input()
+        if player2_phase == 2:
+            phase2(map, int(org), int(des), 2)
+        else:
+            phase3(map, int(org), int(des), 2)
+        if(in_line(map, int(des))):
+            print("Player 2 can remove a piece:")
+            move = input()
+            remove_piece(map,int(move),2)
+
+    if count[0] == 0:
+        print("Player 2 has won!")
     else:
-        phase3(map, int(org), int(des), 1)
-    if(in_line(map, int(des))):
-        print("Player 1 can remove a piece:")
-        move = input()
-        remove_piece(map,int(move),1)
+        print("Player 1 has won!")
 
-    print("Player 2's turn:")
-    org = input()
-    des = input()
-    if player2_phase == 2:
-        phase2(map, int(org), int(des), 2)
-    else:
-        phase3(map, int(org), int(des), 2)
-    if(in_line(map, int(des))):
-        print("Player 2 can remove a piece:")
-        move = input()
-        remove_piece(map,int(move),2)
-
-if count[0] == 0:
-    print("Player 2 has won!")
-else:
-    print("Player 1 has won!")
+#play()
