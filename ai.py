@@ -1,8 +1,5 @@
 import copy
 import math
-from main import in_line
-
-# Max recursion depth: level 5
 
 map = ['x','x','x','x','x','x','x','x','x','x','x','x','x','x','x','x','x','x','x','x','x','x','x','x']
 verticals = [[0, 9, 21], [3, 10, 18], [6, 11, 15], [1, 4, 7], [16, 19, 22], [8, 12, 17], [5, 13, 20], [2, 14, 23]]
@@ -158,6 +155,11 @@ def evaluate(map, phase):
     setup_mill = setup_mill_score(map)
     block = block_score(map)
 
+    if phase == 1:
+        score = 3 * mill + 2 * block + setup_mill
+    else:
+        score = 3 * block + 2 * mill + setup_mill
+
     score = mill + setup_mill + block
     
     return score
@@ -167,18 +169,35 @@ def generate_moves(map, player, phase):
     moves = []
     for i in range(len(map)):
         if phase == 0:
-            if map[i] == abs(player - 1):
-                move = (None, i)
+            opponent = 2 if player == 1 else 1
+            if map[i] == opponent:
+                move = (i, None)
                 moves.append(move)
         elif phase == 1:
             if map[i] == 'x':
-                move = (i, None)
+                move = (None, i)
                 moves.append(move)
         elif phase == 2:
             pass
         else:
             pass
     return moves
+
+#function to check if a specified piece forms a line
+def in_line(map, move):
+    if(map[move]=='x'): return False
+
+    for i in range(0, 21, 3):
+        if move == i or move == i + 1 or move == i + 2:
+            if map[i] == map[i + 1] and map[i] == map[i + 2]:
+                return True
+
+    for v in verticals:
+        if move in v:
+            if map[v[0]] == map[v[1]] and map[v[0]] == map[v[2]]:
+                return True
+            
+    return False
 
 
 def minimax(map, level, player, phase, remove):
@@ -205,7 +224,10 @@ def minimax(map, level, player, phase, remove):
                         new_map[move[1]] = player
                         if in_line(new_map, move[1]):
                             remove = True
-                    score = minimax(new_map, level - 1, 2, phase, remove)[0]
+                    if remove:
+                        score = minimax(new_map, level - 1, 1, phase, True)[0]
+                    else:
+                        score = minimax(new_map, level - 1, 2, phase, False)[0]
                     scores1[move] = score
                 if score > best_score: 
                     best_score = score
@@ -223,11 +245,15 @@ def minimax(map, level, player, phase, remove):
                         new_map[move[1]] = player
                         if in_line(new_map, move[1]):
                             remove = True
-                    score = minimax(new_map, level - 1, 1, phase, remove)[0]
+                    if remove:
+                        score = minimax(new_map, level - 1, 2, phase, True)[0]
+                    else:
+                        score = minimax(new_map, level - 1, 1, phase, remove)[0]
                     scores2[move] = score
                 if score < best_score: 
                     best_score = score
                     best_move = move
-    return best_score, best_move
+    return (best_score, best_move)
 
-print(minimax(map, 10, 1, 1, False))
+#example = [1, 1, 2, 1, 2, 2, 1, 2, 1, 1, 1, 1, 'x', 'x', 'x', 'x', 'x', 'x', 'x', 2, 2, 'x', 'x', 2]
+#print(minimax(example, 10, 1, 1, True))
