@@ -68,7 +68,7 @@ def move(map, org, des, player):
         org = input()
         des = input()
         phase2(map, int(org), int(des), player)
-    elif (map[int(org)] != player) or (map[int(des) != 'x']):
+    elif (map[int(org)] != player) or (map[int(des)]!='x'):
         print(map[org], map[des])
         print(player)
         print("Invalid input")
