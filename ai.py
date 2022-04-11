@@ -11,6 +11,8 @@ connectors = [[1, 4, 7], [9, 10, 11], [12, 13, 14], [16, 19, 22]]
 scores = {}
 game_over = False
 
+alternate = True
+
 # Scores are as follows:
 # Player's full mills: 100
 # Opponent's full mills: -100
@@ -20,6 +22,16 @@ game_over = False
                 # 50 if blocking opponent's mill
 # Opponent's piece: -1 per free space in all directions
                 # -50 is blocking player's mill
+
+def has_mill(map):
+    for i in range(0, 21, 3):
+        if map[i] == 1 and map[i + 1] == 1 and map[i + 2] == 1:
+            return True
+
+    for v in verticals:
+        if map[v[0]] == 1 and map[v[1]] == 1 and map[v[2]] == 1:
+            return True
+    return False
 
 def mill_score(map):
     score = 0
@@ -158,14 +170,20 @@ def evaluate(map, phase):
     mill = mill_score(map)
     setup_mill = setup_mill_score(map)
     block = block_score(map)
-
     if phase == 1:
         score = 3 * mill + 2 * block + setup_mill
+    elif phase == 2 and alternate and has_mill(map):
+        print("Reversing")
+        score = -3 * mill + 2*block - setup_mill
+        alternate = False
+    elif phase == 2 and not alternate:
+        print("normal")
+        score = 3 * mill + 2 * block + setup_mill
+        alternate = True
     else:
         score = 3 * block + 2 * mill + setup_mill
 
-    score = mill + setup_mill + block
-
+    #score = mill + setup_mill + block
     return score
 
 #function to check if a specified piece forms a line
