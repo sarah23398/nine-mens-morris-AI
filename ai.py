@@ -167,19 +167,18 @@ def block_score(map):
 
 
 def evaluate(map, phase):
+    global alternate
     mill = mill_score(map)
     setup_mill = setup_mill_score(map)
     block = block_score(map)
-    if phase == 1:
+    if phase == 1 or phase == 2:
         score = 3 * mill + 2 * block + setup_mill
-    elif phase == 2 and alternate and has_mill(map):
-        print("Reversing")
-        score = -3 * mill + 2*block - setup_mill
-        alternate = False
-    elif phase == 2 and not alternate:
-        print("normal")
-        score = 3 * mill + 2 * block + setup_mill
-        alternate = True
+    #elif phase == 2 and alternate and has_mill(map):
+        #score = -3 * mill + 2*block - setup_mill
+        #alternate = False
+    #elif phase == 2 and not alternate:
+        #score = 3 * mill + 2 * block + setup_mill
+        #alternate = True
     else:
         score = 3 * block + 2 * mill + setup_mill
 
@@ -256,7 +255,7 @@ def minimax(map, level, player, phase, remove):
     best_move = None
 
     if game_over or level == 0:
-        best_score = evaluate(map, 1)
+        best_score = evaluate(map, phase)
     else:
         if remove: children = generate_moves(map, player, 0)
         else: children = generate_moves(map, player, phase)
