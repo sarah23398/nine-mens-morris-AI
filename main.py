@@ -1,5 +1,5 @@
 import math
-from ai import minimax, in_line
+from ai import minimax, in_line, verticals, rings, connectors
 
 #function for printing the current state of the board, takes a double array as input for the map
 #empty spots are represented by x, player 1 and 2's pieces are represented by 1 and 2
@@ -42,11 +42,22 @@ def phase1(map,move, player):
 #function called during player's turn during phase two, moving pieces in a line
 def phase2(map, org, des, player):
     can_move = False
-    if des == org + 1 or des == org + 2:
-        can_move = True
-    else:
-        for v in verticals:
-            if org in v and des in v:
+    for r in rings:
+        if org in r:
+            index = r.index(org)
+            if index + 1 < len(r) and des == r[index + 1] and map[des] == 'x':
+                can_move = True
+                break
+            elif index - 1 >= 0 and des == r[index - 1] and map[des] == 'x':
+                can_move = True
+                break
+    for c in connectors:
+        if org in c:
+            index = c.index(org)
+            if index + 1 < len(c) and des == c[index + 1] and map[des] == 'x':
+                can_move = True
+                break
+            elif index - 1 >= 0 and des == c[index - 1] and map[des] == 'x':
                 can_move = True
                 break
     if can_move: move(map, org, des, player)
@@ -111,7 +122,6 @@ def remove_piece(map, move, player):
         move = input()
         remove_piece(map, int(move), player)
 
-verticals = [[0, 9, 21], [3, 10, 18], [6, 11, 15], [1, 4, 7], [16, 19, 22], [8, 12, 17], [5, 13, 20], [2, 14, 23]]
 map = ['x','x','x','x','x','x','x','x','x','x','x','x','x','x','x','x','x','x','x','x','x','x','x','x']
 player1_moves = 9
 player2_moves = 9
@@ -122,12 +132,12 @@ def play():
     global player2_moves
     while(player1_moves!=0 and player2_moves!=0):
         print("Player 1's turn:")
-        move = minimax(map, 10, 1, 1, False)[1][1]
+        move = minimax(map, 3, 1, 1, False)[1][1]
         phase1(map,int(move), 1)
         player1_moves-=1
         if(in_line(map, int(move))):
             print("Player 1 can remove a piece:")
-            move = minimax(map, 10, 1, 1, True)[1][0]
+            move = minimax(map, 3, 1, 1, True)[1][0]
             remove_piece(map,int(move),1)
 
         print("Player 2's turn:")
@@ -150,14 +160,14 @@ def play():
 
         print("Player 1's turn:")
         if player1_phase == 2:
-            move = minimax(map, 10, 1, 2, False)[1]
+            move = minimax(map, 5, 1, 2, False)[1]
             phase2(map, int(move[0]), int(move[1]), 1)
         else:
-            move = minimax(map, 10, 1, 3, False)[1]
+            move = minimax(map, 5, 1, 3, False)[1]
             phase2(map, int(move[0]), int(move[1]), 1)
-        if(in_line(map, int(des))):
+        if(in_line(map, int(move[1]))):
             print("Player 1 can remove a piece:")
-            move = minimax(map, 10, 1, 2, True)[1][0]
+            move = minimax(map, 5, 1, 2, True)[1][0]
             remove_piece(map,int(move),1)
 
         print("Player 2's turn:")
