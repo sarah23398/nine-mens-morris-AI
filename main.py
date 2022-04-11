@@ -162,7 +162,7 @@ def play():
     print("Final map: ")
     print_map(map)
 
-    while count[0] > 3 and count[1] > 3:
+    while count[0] > 2 and count[1] > 2:
         if count[0] > 3: player1_phase = 2
         else: player1_phase = 3
         if count[1] > 3: player2_phase = 2
@@ -193,7 +193,7 @@ def play():
             move = input()
             remove_piece(map,int(move),2)
 
-    if count[0] == 3:
+    if count[0] == 2:
         print("Player 2 has won!")
     else:
         print("Player 1 has won!")
