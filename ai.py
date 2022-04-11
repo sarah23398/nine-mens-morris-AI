@@ -30,7 +30,7 @@ def mill_score(map):
     for v in verticals:
         if map[v[0]] == 1 and map[v[1]] == 1 and map[v[2]] == 1:
             score += 100
-        
+
     for i in range(0, 21, 3):
         if map[i] == 2 and map[i + 1] == 2 and map[i + 2] == 2:
             score -= 100
@@ -38,7 +38,7 @@ def mill_score(map):
     for v in verticals:
         if map[v[0]] == 2 and map[v[1]] == 2 and map[v[2]] == 2:
             score -= 100
-    
+
     return score
 
 def setup_mill_score(map):
@@ -72,7 +72,7 @@ def setup_mill_score(map):
             for j in range(3):
                 if map[v[j]] == 'x':
                     score += 1
-        
+
     for i in range(0, 21, 3):
         if map[i] == 1 and map[i + 1] == 1:
             if map[i + 2] == 'x':
@@ -102,7 +102,7 @@ def setup_mill_score(map):
             for j in range(3):
                 if map[v[j]] == 'x':
                     score -= 1
-    
+
     return score
 
 def block_score(map):
@@ -128,7 +128,7 @@ def block_score(map):
         elif map[v[1]] == 2 and map[v[2]] == 2:
             if map[v[0]] == 1:
                 score += 50
-    
+
     for i in range(0, 21, 3):
         if map[i] == 1 and map[i + 1] == 1:
             if map[i + 2] == 2:
@@ -165,7 +165,7 @@ def evaluate(map, phase):
         score = 3 * block + 2 * mill + setup_mill
 
     score = mill + setup_mill + block
-    
+
     return score
 
 #function to check if a specified piece forms a line
@@ -181,7 +181,7 @@ def in_line(map, move):
         if move in v:
             if map[v[0]] == map[v[1]] and map[v[0]] == map[v[2]]:
                 return True
-            
+
     return False
 
 # Phase 0 = removal
@@ -261,7 +261,7 @@ def minimax(map, level, player, phase, remove):
                     else:
                         score = minimax(new_map, level - 1, 2, phase, False)[0]
                     scores[tuple(new_map)] = score
-                if score > best_score: 
+                if score > best_score:
                     best_score = score
                     best_move = move
         else:
@@ -289,7 +289,7 @@ def minimax(map, level, player, phase, remove):
                     else:
                         score = minimax(new_map, level - 1, 1, phase, remove)[0]
                     scores[tuple(new_map)] = score
-                if score < best_score: 
+                if score < best_score:
                     best_score = score
                     best_move = move
     return (best_score, best_move)
