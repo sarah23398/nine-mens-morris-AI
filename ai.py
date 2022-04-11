@@ -172,7 +172,7 @@ def evaluate(map, phase):
 def in_line(map, move):
     if(map[move]=='x'): return False
 
-    for i in range(0, 21, 3):
+    for i in range(0, 24, 3):
         if move == i or move == i + 1 or move == i + 2:
             if map[i] == map[i + 1] and map[i] == map[i + 2]:
                 return True
